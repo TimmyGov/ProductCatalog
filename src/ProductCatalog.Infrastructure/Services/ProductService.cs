@@ -45,11 +45,16 @@ public class ProductService : IProductService
             .Take(pageSize)
             .ToList();
 
-        var productDtos = new List<ProductDto>();
-        foreach (var product in pagedProducts)
+        var categoryIds = pagedProducts.Select(p => p.CategoryId).Distinct().ToList();
+        var categories = await _categoryRepository.GetAll();
+        var categoryDict = categories
+            .Where(c => categoryIds.Contains(c.Id))
+            .ToDictionary(c => c.Id, c => c);
+
+        var productDtos = pagedProducts.Select(product =>
         {
-            var category = await _categoryRepository.GetById(product.CategoryId);
-            productDtos.Add(new ProductDto(
+            categoryDict.TryGetValue(product.CategoryId, out var category);
+            return new ProductDto(
                 product.Id,
                 product.Name,
                 product.Description,
@@ -60,8 +65,8 @@ public class ProductService : IProductService
                 category?.Name,
                 product.CreatedAt,
                 product.UpdatedAt
-            ));
-        }
+            );
+        }).ToList();
 
         return productDtos;
     }
@@ -176,11 +181,16 @@ public class ProductService : IProductService
             .Take(pageSize)
             .ToList();
 
-        var productDtos = new List<ProductDto>();
-        foreach (var product in pagedProducts)
+        var categoryIds = pagedProducts.Select(p => p.CategoryId).Distinct().ToList();
+        var categories = await _categoryRepository.GetAll();
+        var categoryDict = categories
+            .Where(c => categoryIds.Contains(c.Id))
+            .ToDictionary(c => c.Id, c => c);
+
+        var productDtos = pagedProducts.Select(product =>
         {
-            var category = await _categoryRepository.GetById(product.CategoryId);
-            productDtos.Add(new ProductDto(
+            categoryDict.TryGetValue(product.CategoryId, out var category);
+            return new ProductDto(
                 product.Id,
                 product.Name,
                 product.Description,
@@ -191,8 +201,8 @@ public class ProductService : IProductService
                 category?.Name,
                 product.CreatedAt,
                 product.UpdatedAt
-            ));
-        }
+            );
+        }).ToList();
 
         return productDtos;
     }

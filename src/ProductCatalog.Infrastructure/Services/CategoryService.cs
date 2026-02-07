@@ -68,14 +68,14 @@ public class CategoryService : ICategoryService
         var categoryTree = new List<CategoryTreeDto>();
         foreach (var rootCategory in rootCategories)
         {
-            var treeNode = await BuildCategoryTree(rootCategory, allCategories);
+            var treeNode = BuildCategoryTree(rootCategory, allCategories);
             categoryTree.Add(treeNode);
         }
 
         return categoryTree;
     }
 
-    private async Task<CategoryTreeDto> BuildCategoryTree(Category category, IEnumerable<Category> allCategories)
+    private CategoryTreeDto BuildCategoryTree(Category category, IEnumerable<Category> allCategories)
     {
         var children = allCategories
             .Where(c => c.ParentCategoryId == category.Id)
@@ -84,7 +84,7 @@ public class CategoryService : ICategoryService
         var childrenTree = new List<CategoryTreeDto>();
         foreach (var child in children)
         {
-            var childTree = await BuildCategoryTree(child, allCategories);
+            var childTree = BuildCategoryTree(child, allCategories);
             childrenTree.Add(childTree);
         }
 
