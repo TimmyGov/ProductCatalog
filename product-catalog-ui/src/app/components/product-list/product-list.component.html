@@ -1,0 +1,108 @@
+<div class="product-list-container">
+  <div class="header">
+    <h2>Products</h2>
+    <button class="btn btn-primary" routerLink="/products/new">
+      Add New Product
+    </button>
+  </div>
+
+  <app-error-message [errorMessage]="error"></app-error-message>
+
+  <div class="filters">
+    <div class="filter-item">
+      <app-search-bar (searchChange)="onSearchChange($event)"></app-search-bar>
+    </div>
+    <div class="filter-item">
+      <app-category-filter
+        [categories]="categories"
+        (categoryChange)="onCategoryChange($event)"
+      ></app-category-filter>
+    </div>
+  </div>
+
+  <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+  <div *ngIf="!loading" class="table-container">
+    <table class="products-table" *ngIf="products.length > 0">
+      <thead>
+        <tr>
+          <th (click)="onSort('name')" class="sortable">
+            Name {{ getSortIcon('name') }}
+          </th>
+          <th>SKU</th>
+          <th (click)="onSort('price')" class="sortable">
+            Price {{ getSortIcon('price') }}
+          </th>
+          <th>Quantity</th>
+          <th>Category</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td>{{ product.name }}</td>
+          <td>{{ product.sku }}</td>
+          <td>${{ product.price.toFixed(2) }}</td>
+          <td>{{ product.quantity }}</td>
+          <td>{{ product.categoryName || '-' }}</td>
+          <td class="actions">
+            <button
+              class="btn btn-sm btn-secondary"
+              (click)="editProduct(product.id)"
+            >
+              Edit
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              (click)="deleteProduct(product.id)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="products.length === 0" class="no-products">
+      <p>No products found.</p>
+    </div>
+
+    <div class="pagination" *ngIf="totalCount > 0">
+      <div class="pagination-info">
+        Showing {{ (currentPage - 1) * pageSize + 1 }} to
+        {{ Math.min(currentPage * pageSize, totalCount) }} of
+        {{ totalCount }} products
+      </div>
+
+      <div class="pagination-controls">
+        <label>
+          Items per page:
+          <select [value]="pageSize" (change)="onPageSizeChange(+$any($event.target).value)">
+            <option [value]="5">5</option>
+            <option [value]="10">10</option>
+            <option [value]="25">25</option>
+            <option [value]="50">50</option>
+          </select>
+        </label>
+
+        <div class="page-buttons">
+          <button
+            class="btn btn-sm"
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+          >
+            Previous
+          </button>
+          <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+          <button
+            class="btn btn-sm"
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

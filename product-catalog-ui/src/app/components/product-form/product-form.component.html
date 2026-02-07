@@ -1,0 +1,105 @@
+<div class="product-form-container">
+  <div class="header">
+    <h2>{{ isEditMode ? 'Edit Product' : 'Create New Product' }}</h2>
+  </div>
+
+  <app-error-message [errorMessage]="error"></app-error-message>
+
+  <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" *ngIf="!loading" class="product-form">
+    <div class="form-group">
+      <label for="name">Name *</label>
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        class="form-control"
+        [class.is-invalid]="getFieldError('name')"
+      />
+      <div class="error-text" *ngIf="getFieldError('name')">
+        {{ getFieldError('name') }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="sku">SKU *</label>
+      <input
+        type="text"
+        id="sku"
+        formControlName="sku"
+        class="form-control"
+        [class.is-invalid]="getFieldError('sku')"
+      />
+      <div class="error-text" *ngIf="getFieldError('sku')">
+        {{ getFieldError('sku') }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        class="form-control"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="price">Price *</label>
+        <input
+          type="number"
+          id="price"
+          formControlName="price"
+          class="form-control"
+          step="0.01"
+          min="0"
+          [class.is-invalid]="getFieldError('price')"
+        />
+        <div class="error-text" *ngIf="getFieldError('price')">
+          {{ getFieldError('price') }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="quantity">Quantity *</label>
+        <input
+          type="number"
+          id="quantity"
+          formControlName="quantity"
+          class="form-control"
+          min="0"
+          [class.is-invalid]="getFieldError('quantity')"
+        />
+        <div class="error-text" *ngIf="getFieldError('quantity')">
+          {{ getFieldError('quantity') }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="categoryId">Category</label>
+      <select
+        id="categoryId"
+        formControlName="categoryId"
+        class="form-control"
+      >
+        <option [value]="null">Select a category</option>
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ isEditMode ? 'Update' : 'Create' }} Product
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
