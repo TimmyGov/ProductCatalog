@@ -21,7 +21,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts(
+    public async Task<ActionResult<object>> GetProducts(
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10,
         [FromQuery] int? categoryId = null,
@@ -46,18 +46,19 @@ public class ProductsController : ControllerBase
             return BadRequest(new { error = validationResult });
         }
 
-        IEnumerable<ProductDto> products;
+        PagedResult<ProductDto> result;
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            products = await _productService.SearchProductsAsync(searchTerm, page, pageSize);
+            result = await _productService.SearchProductsAsync(searchTerm, page, pageSize);
         }
         else
         {
-            products = await _productService.GetAllAsync(page, pageSize, minPrice, maxPrice, categoryId);
+            result = await _productService.GetAllAsync(page, pageSize, minPrice, maxPrice, categoryId);
         }
 
-        return Ok(products);
+        // Return in the format expected by Angular frontend
+        return Ok(new { products = result.Items, totalCount = result.TotalCount });
     }
 
     [HttpGet("{id}")]

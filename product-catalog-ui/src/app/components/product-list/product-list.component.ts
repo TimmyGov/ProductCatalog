@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, fromEvent } from 'rxjs';
 import { ProductService } from '../../services/product.service';
 import { CategoryService } from '../../services/category.service';
 import { SearchService } from '../../services/search.service';
@@ -40,6 +40,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
   selectedCategoryId: number | null = null;
   sortBy = 'name';
   sortOrder: 'asc' | 'desc' = 'asc';
+  
+  // Delete confirmation properties
+  showDeleteConfirm = false;
+  productToDelete: { id: number; name: string } | null = null;
   
   Math = Math;
   
@@ -158,17 +162,36 @@ export class ProductListComponent implements OnInit, OnDestroy {
     const product = this.products.find(p => p.id === id);
     if (!product) return;
 
-    if (confirm(`Are you sure you want to delete "${product.name}"?`)) {
-      this.productService.deleteProduct(id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
-            this.loadProducts();
-          },
-          error: (error) => {
-            this.error = error.message;
-          }
-        });
+    this.productToDelete = { id: product.id, name: product.name };
+    this.showDeleteConfirm = true;
+  }
+
+  confirmDelete(): void {
+    if (!this.productToDelete) return;
+
+    this.productService.deleteProduct(this.productToDelete.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.loadProducts();
+          this.cancelDelete();
+        },
+        error: (error) => {
+          this.error = error.message;
+          this.cancelDelete();
+        }
+      });
+  }
+
+  cancelDelete(): void {
+    this.showDeleteConfirm = false;
+    this.productToDelete = null;
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  onEscapeKey(event: KeyboardEvent): void {
+    if (this.showDeleteConfirm) {
+      this.cancelDelete();
     }
   }
 

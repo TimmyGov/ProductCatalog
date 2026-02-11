@@ -35,7 +35,7 @@ public class ProductServiceTests
         var result = await _productService.GetAllAsync(pageNumber: 2, pageSize: 10);
 
         // Assert
-        var resultList = result.ToList();
+        var resultList = result.Items.ToList();
         Assert.Equal(10, resultList.Count);
         Assert.Equal(11, resultList.First().Id); // Second page starts at item 11
         Assert.Equal(20, resultList.Last().Id);  // Second page ends at item 20
@@ -62,7 +62,7 @@ public class ProductServiceTests
         var result = await _productService.GetAllAsync(pageNumber: 1, pageSize: 10, minPrice: 50);
 
         // Assert
-        var resultList = result.ToList();
+        var resultList = result.Items.ToList();
         Assert.Equal(2, resultList.Count);
         Assert.All(resultList, p => Assert.True(p.Price >= 50));
     }
@@ -88,7 +88,7 @@ public class ProductServiceTests
         var result = await _productService.GetAllAsync(pageNumber: 1, pageSize: 10, maxPrice: 50);
 
         // Assert
-        var resultList = result.ToList();
+        var resultList = result.Items.ToList();
         Assert.Equal(2, resultList.Count);
         Assert.All(resultList, p => Assert.True(p.Price <= 50));
     }
@@ -118,7 +118,7 @@ public class ProductServiceTests
         var result = await _productService.GetAllAsync(pageNumber: 1, pageSize: 10, categoryId: 1);
 
         // Assert
-        var resultList = result.ToList();
+        var resultList = result.Items.ToList();
         Assert.Equal(2, resultList.Count);
         Assert.All(resultList, p => Assert.Equal(1, p.CategoryId));
     }
@@ -150,7 +150,7 @@ public class ProductServiceTests
             categoryId: 1);
 
         // Assert
-        var resultList = result.ToList();
+        var resultList = result.Items.ToList();
         Assert.Single(resultList);
         Assert.Equal(2, resultList[0].Id);
         Assert.Equal(50, resultList[0].Price);
@@ -392,7 +392,7 @@ public class ProductServiceTests
         var result = await _productService.SearchProductsAsync("Gaming", pageNumber: 1, pageSize: 10);
 
         // Assert
-        var resultList = result.ToList();
+        var resultList = result.Items.ToList();
         Assert.Equal(2, resultList.Count);
         Assert.All(resultList, p => Assert.Contains("Gaming", p.Name));
     }
@@ -413,7 +413,7 @@ public class ProductServiceTests
         var result = await _productService.SearchProductsAsync("Gaming", pageNumber: 2, pageSize: 10);
 
         // Assert
-        var resultList = result.ToList();
+        var resultList = result.Items.ToList();
         Assert.Equal(10, resultList.Count);
         Assert.Equal(11, resultList.First().Id);
         Assert.Equal(20, resultList.Last().Id);
@@ -434,7 +434,7 @@ public class ProductServiceTests
         var result = await _productService.SearchProductsAsync("NonExistent", pageNumber: 1, pageSize: 10);
 
         // Assert
-        Assert.Empty(result);
+        Assert.Empty(result.Items);
     }
 
     [Fact]
@@ -459,7 +459,7 @@ public class ProductServiceTests
         var result = await _productService.GetAllAsync();
 
         // Assert
-        var productDto = result.First();
+        var productDto = result.Items.First();
         Assert.Equal("Electronics", productDto.CategoryName);
     }
 
@@ -485,7 +485,7 @@ public class ProductServiceTests
         var result = await _productService.GetAllAsync();
 
         // Assert
-        var productDto = result.First();
+        var productDto = result.Items.First();
         Assert.Null(productDto.CategoryName);
     }
 

@@ -16,7 +16,7 @@ public class ProductService : IProductService
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<IEnumerable<ProductDto>> GetAllAsync(
+    public async Task<PagedResult<ProductDto>> GetAllAsync(
         int pageNumber = 1,
         int pageSize = 10,
         decimal? minPrice = null,
@@ -40,6 +40,7 @@ public class ProductService : IProductService
             products = products.Where(p => p.Price <= maxPrice.Value);
         }
 
+        var totalCount = products.Count();
         var pagedProducts = products
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -68,7 +69,13 @@ public class ProductService : IProductService
             );
         }).ToList();
 
-        return productDtos;
+        return new PagedResult<ProductDto>
+        {
+            Items = productDtos,
+            TotalCount = totalCount,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
     }
 
     public async Task<ProductDto?> GetByIdAsync(int id)
@@ -169,13 +176,14 @@ public class ProductService : IProductService
         return true;
     }
 
-    public async Task<IEnumerable<ProductDto>> SearchProductsAsync(
+    public async Task<PagedResult<ProductDto>> SearchProductsAsync(
         string searchTerm,
         int pageNumber = 1,
         int pageSize = 10)
     {
         var products = await _productRepository.SearchByName(searchTerm);
 
+        var totalCount = products.Count();
         var pagedProducts = products
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -204,6 +212,12 @@ public class ProductService : IProductService
             );
         }).ToList();
 
-        return productDtos;
+        return new PagedResult<ProductDto>
+        {
+            Items = productDtos,
+            TotalCount = totalCount,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
     }
 }

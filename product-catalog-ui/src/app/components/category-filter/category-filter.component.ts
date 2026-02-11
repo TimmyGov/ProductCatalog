@@ -14,7 +14,7 @@ import { Category } from '../../models';
         (ngModelChange)="onCategoryChange($event)"
         class="category-select"
       >
-        <option [value]="null">All Categories</option>
+        <option [value]="''">All Categories</option>
         <option *ngFor="let category of categories" [value]="category.id">
           {{ category.name }}
         </option>
@@ -37,9 +37,10 @@ import { Category } from '../../models';
 export class CategoryFilterComponent {
   @Input() categories: Category[] = [];
   @Output() categoryChange = new EventEmitter<number | null>();
-  selectedCategoryId: number | null = null;
+  selectedCategoryId: string | number = '';
 
-  onCategoryChange(categoryId: number | null): void {
-    this.categoryChange.emit(categoryId);
+  onCategoryChange(categoryId: string | number): void {
+    const numericCategoryId = categoryId === '' ? null : Number(categoryId);
+    this.categoryChange.emit(numericCategoryId);
   }
 }

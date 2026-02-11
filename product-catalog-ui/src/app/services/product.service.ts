@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Product, CreateProduct, UpdateProduct } from '../models';
@@ -28,7 +28,7 @@ export class ProductService {
     if (search) {
       params = params.set('search', search);
     }
-    if (categoryId) {
+    if (categoryId && categoryId > 0) {
       params = params.set('categoryId', categoryId.toString());
     }
     if (sortBy) {
@@ -73,7 +73,10 @@ export class ProductService {
   }
 
   deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`)
+    const headers = new HttpHeaders({
+      'X-Confirm-Delete': 'true'
+    });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers })
       .pipe(catchError(this.handleError));
   }
 

@@ -128,7 +128,7 @@ static async Task SeedDataAsync(WebApplication app)
             Name = "MacBook Pro 16\"",
             Description = "High-performance laptop with M3 chip",
             SKU = "MBP-16-M3",
-            Price = 2499.99m,
+            Price = 44999.99m,
             Quantity = 15,
             CategoryId = 3,
             CreatedAt = DateTime.UtcNow
@@ -139,7 +139,7 @@ static async Task SeedDataAsync(WebApplication app)
             Name = "Dell XPS 15",
             Description = "Premium Windows laptop",
             SKU = "DELL-XPS-15",
-            Price = 1899.99m,
+            Price = 34199.99m,
             Quantity = 20,
             CategoryId = 3,
             CreatedAt = DateTime.UtcNow
@@ -150,7 +150,7 @@ static async Task SeedDataAsync(WebApplication app)
             Name = "iPhone 15 Pro",
             Description = "Latest iPhone with titanium design",
             SKU = "IPH-15-PRO",
-            Price = 999.99m,
+            Price = 17999.99m,
             Quantity = 50,
             CategoryId = 5,
             CreatedAt = DateTime.UtcNow
@@ -161,7 +161,7 @@ static async Task SeedDataAsync(WebApplication app)
             Name = "Samsung Galaxy S24",
             Description = "Flagship Android smartphone",
             SKU = "SAM-S24",
-            Price = 899.99m,
+            Price = 16199.99m,
             Quantity = 40,
             CategoryId = 5,
             CreatedAt = DateTime.UtcNow
@@ -172,7 +172,7 @@ static async Task SeedDataAsync(WebApplication app)
             Name = "Gaming Desktop PC",
             Description = "High-end gaming computer with RTX 4090",
             SKU = "DESK-GAME-001",
-            Price = 3499.99m,
+            Price = 62999.99m,
             Quantity = 8,
             CategoryId = 4,
             CreatedAt = DateTime.UtcNow
@@ -183,7 +183,7 @@ static async Task SeedDataAsync(WebApplication app)
             Name = "Men's Casual Shirt",
             Description = "100% cotton casual shirt",
             SKU = "SHIRT-M-001",
-            Price = 49.99m,
+            Price = 899.99m,
             Quantity = 100,
             CategoryId = 7,
             CreatedAt = DateTime.UtcNow
@@ -194,7 +194,7 @@ static async Task SeedDataAsync(WebApplication app)
             Name = "Women's Summer Dress",
             Description = "Floral pattern summer dress",
             SKU = "DRESS-W-001",
-            Price = 79.99m,
+            Price = 1439.99m,
             Quantity = 75,
             CategoryId = 8,
             CreatedAt = DateTime.UtcNow
@@ -205,7 +205,7 @@ static async Task SeedDataAsync(WebApplication app)
             Name = "Office Desktop",
             Description = "Business desktop computer",
             SKU = "DESK-OFF-001",
-            Price = 899.99m,
+            Price = 16199.99m,
             Quantity = 25,
             CategoryId = 4,
             CreatedAt = DateTime.UtcNow

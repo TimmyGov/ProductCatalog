@@ -4,7 +4,7 @@ namespace ProductCatalog.Application.Interfaces;
 
 public interface IProductService
 {
-    Task<IEnumerable<ProductDto>> GetAllAsync(
+    Task<PagedResult<ProductDto>> GetAllAsync(
         int pageNumber = 1, 
         int pageSize = 10, 
         decimal? minPrice = null, 
@@ -19,7 +19,7 @@ public interface IProductService
     
     Task<bool> DeleteAsync(int id);
     
-    Task<IEnumerable<ProductDto>> SearchProductsAsync(
+    Task<PagedResult<ProductDto>> SearchProductsAsync(
         string searchTerm, 
         int pageNumber = 1, 
         int pageSize = 10);
