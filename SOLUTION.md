@@ -16,7 +16,7 @@
 
 ### High-Level Architecture
 
-This solution implements **Clean Architecture** (also known as Onion Architecture or Hexagonal Architecture) with clear separation of concerns across four distinct layers:
+This solution implements **Clean Architecture** with clear separation of concerns across four distinct layers:
 
 ```
 ┌─────────────────────────────────────────────────────┐
